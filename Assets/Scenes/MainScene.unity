@@ -89594,18 +89594,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 294206387226133090, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
-      propertyPath: dog
-      value: 
-      objectReference: {fileID: 1777329762}
-    - target: {fileID: 2174581320995445904, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4558901262464530442, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4774222998966287154, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
       propertyPath: m_Name
       value: Player
@@ -89649,10 +89637,6 @@ PrefabInstance:
     - target: {fileID: 5741113203092689751, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8432316681655806153, guid: 213caf61fe2556545b92a9d55fd39b4b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -91410,17 +91394,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776833546}
   m_CullTransparentMesh: 1
---- !u!114 &1777329762 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2553083215695855361, guid: 9aa8cfeeba92acf4aa5b43ec6c598fa5, type: 3}
-  m_PrefabInstance: {fileID: 4928639513646271987}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fdf6b806e921c5468d6e69b8b6fbd4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1820022110
 GameObject:
   m_ObjectHideFlags: 0

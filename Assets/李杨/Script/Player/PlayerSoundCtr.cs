@@ -6,8 +6,10 @@ public class PlayerSoundCtr : MonoBehaviour
 {
 
     public AudioSource groundMusic; 
+    public AudioSource walkSound;
     public AudioClip[] musicClips;      // 可选的背景音乐剪辑列表
-    private int currentClipIndex = 0;   // 当前播放的音乐剪辑索引 
+    private int currentClipIndexcuan = 0;   // 当前播放的音乐剪辑索引 
+    private bool isWalking = false;
     void Start()
     {
         if (groundMusic == null)
@@ -15,9 +17,21 @@ public class PlayerSoundCtr : MonoBehaviour
             groundMusic = GetComponent<AudioSource>();
         }
     }
-    public void PlayeMoveAudio()
+    public void OpenWalkAudio()
     {
-        PlayMusic(0);
+        if (isWalking == false)
+        {
+            isWalking = true;
+            walkSound.Play();
+        }
+    }
+    public void CloseWalkAudio()
+    {
+        if (isWalking == true)
+        {             
+            isWalking = false;
+            walkSound.Stop();
+        }
     }
     public void PlayerShootAudio()
     {
@@ -37,7 +51,7 @@ public class PlayerSoundCtr : MonoBehaviour
             return;
         }
 
-        currentClipIndex = clipIndex;
+        currentClipIndexcuan = clipIndex;
         groundMusic.clip = musicClips[clipIndex];
         groundMusic.Play();
     }

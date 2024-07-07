@@ -10,6 +10,7 @@ public class PlayerAction : MonoBehaviour
     public GameObject arrow;//Éä³öÈ¥µÄ¼ýÊ¸
     public GameObject bowAndArrow;//¹­¼ý
     public GameObject knife;
+    public GameObject DidUI;
     private float handDistance = 0.24f;
     private bool isShooting = false;
     private Rigidbody2D rb;
@@ -21,6 +22,7 @@ public class PlayerAction : MonoBehaviour
         playerAttribute = GetComponent<PlayerAttribute>();
         rb = GetComponent<Rigidbody2D>();
         m_speed = playerAttribute.playerSpeed;
+         
     }
 
     void Update()
@@ -53,11 +55,19 @@ public class PlayerAction : MonoBehaviour
         Animator animator = GetComponent<Animator>(); 
         animator.SetFloat("xValue", horizontal); 
         animator.SetFloat("yValue", vertical);
-
+        if(horizontal==0&&vertical == 0) 
+        {
+            gameObject.GetComponent<PlayerSoundCtr>().CloseWalkAudio();           
+        }
+        else
+        {
+            gameObject.GetComponent<PlayerSoundCtr>().OpenWalkAudio();
+        }
     }
     //Éä»÷
     IEnumerator PlayerShoot()
     {
+        gameObject.GetComponent<PlayerSoundCtr>().PlayerShootAudio();
         isShooting=true;
         Animator animator = hand.GetComponentInChildren<Animator>();
         animator.SetTrigger("isShoot");
@@ -108,6 +118,10 @@ public class PlayerAction : MonoBehaviour
             knife.SetActive(true);
             bowAndArrow.SetActive(false);
         }
+    }
+    public void PlayerDie()
+    { 
+        Instantiate(DidUI); 
     }
 
 }

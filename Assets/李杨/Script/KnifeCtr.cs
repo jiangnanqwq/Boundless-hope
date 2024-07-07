@@ -32,6 +32,7 @@ public class KnifeCtr : MonoBehaviour
     {
         Animator animator = this.GetComponentInChildren<Animator>();
         animator.SetTrigger("isCut");
+        GameObject.Find("Player").GetComponent<PlayerSoundCtr>().PlayerCutAudio();
     }
     //¶¯»­ÊÂ¼þ
     //1:over

@@ -14,7 +14,7 @@ public class PlayerAttribute : MonoBehaviour
         {
             if (value <= 0)
             {
-                //DeadAction
+                gameObject.GetComponent<PlayerAction>().PlayerDie();
                 return;
             }
             else if (value > playerHPMax)
