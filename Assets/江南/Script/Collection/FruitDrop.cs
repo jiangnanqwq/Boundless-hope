@@ -97,6 +97,7 @@ public class FruitDrop : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            if (fruitCount <= 0) return;
             BagManagement.instance.collectionUI.SetActive(true);
 
             Vector3 targetWorldPosition = collision.transform.position;

@@ -54,6 +54,7 @@ public class KnifeCtr : MonoBehaviour
             {
                 Debug.Log("µ¶Åöµ½ÁË¹·");
                 collision.GetComponent<DogAttribute>().DogHP -= 20;
+                collision.GetComponent<DogAttribute>().DogTP -= 20;
             }
         }
 
