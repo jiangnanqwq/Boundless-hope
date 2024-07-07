@@ -34,6 +34,12 @@ public class BagManagement : MonoBehaviour
 
     public GameObject imageTips;
 
+    public Image imageDog;
+    public Image sliderLeftDog;
+    public Image sliderRightDog;
+    public Text textLeftDog;
+    public Text textRightDog;
+
     private void Start()
     {
         UpdateUI();

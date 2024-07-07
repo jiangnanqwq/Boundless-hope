@@ -18,3 +18,5 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 0004eba09372e8343a00eb901ff0a8e5, type: 3}
   category: 2
   hungerRecoverPoint: 30
+  dogEat:
+    trustPoint: 40

@@ -79,16 +79,26 @@ public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(eventData.position);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
-        if (hit.collider != null && hit.collider.CompareTag("Bonfire"))
+        if (hit.collider != null)
         {
-            ResetPosition();//先撤回  以免更新UI的时候，slot槽未归位
-            Debug.Log("Dropped on: " + hit.collider.gameObject.name);
-            if(obj.obj.ID==4&& hit.collider.GetComponent<Bonfire>().canCook)
+            if (hit.collider.CompareTag("Bonfire") && obj.obj.ID == 4 && hit.collider.GetComponent<Bonfire>().canCook)
             {
+                ResetPosition();//先撤回  以免更新UI的时候，slot槽未归位
+                Debug.Log("Dropped on: " + hit.collider.gameObject.name);
                 BagManagement.instance.ObjToBag(4, -1);
                 BagManagement.instance.ObjToBag(3, 1);
+                return true;
             }
-            return true;
+            else if (hit.collider.CompareTag("Dog") )
+            {
+                ResetPosition();
+                DogAttribute dog =hit.collider.GetComponent<DogAttribute>();
+                if (dog.EatMeat(obj.obj as Object_Consume))
+                {
+                    BagManagement.instance.ObjToBag(obj.obj.ID, -1);
+                }
+                return true;
+            }
         }
         return false;
     }

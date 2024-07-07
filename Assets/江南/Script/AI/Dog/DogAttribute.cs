@@ -12,32 +12,69 @@ public class DogAttribute : AttributeBase
             if (value < 0)
             {
                 value = 0;
+                //DeadAction
+
+
             }
             else if (value > MaxHP) value = MaxHP;
             currentHP = value;
             //UI
-
+            BagManagement.instance.sliderLeftDog.fillAmount = currentHP/ MaxHP;
+            BagManagement.instance.textLeftDog.text = (int)currentHP + "/" + (int)MaxHP;
 
         }
     }
 
     public float dogTPMax = 100;//Trust Point
-    public float dogTP = 20;
+    private float dogTP = 20;
+    public float DogTP
+    {
+        get => dogTP;
+        set
+        {
+            if (value < 0)
+            {
+                value = 0;
+                //Trust Action
+
+
+            }
+            else if (value > dogTPMax) value = dogTPMax;
+            dogTP = value;
+            //UI
+            BagManagement.instance.sliderRightDog.fillAmount = dogTP / dogTPMax;
+            BagManagement.instance.textRightDog.text = (int)dogTP + "/" + (int)dogTPMax;
+        }
+    }
 
     [HideInInspector] public bool isBiteSheep = false;
     public float biteTime = 5;//咬住控制时间
     [HideInInspector] public bool isBiteInCD = false;
     public float biteCDTime = 5;//攻击CD时间
 
+    private float decreaseHPSpeed = 0.5f;
     private void Start()
     {
-        speed = 5;
-        biteTime = 5;
+        //speed = 5;
+        biteTime = 5; 
+        DogTP = 20;
+        DogHP = MaxHP;
     }
+    private void Update()
+    {
+        DogHP -= Time.deltaTime * decreaseHPSpeed;
+    }
+
+
+
+
+
+
+
     GameObject sheep;
     public void Attack()
     {
-        if (MapManagement.Sheeps.Length > 0 && !isBiteInCD)
+        if (MapManagement.Sheeps.Length > 0 && !isBiteInCD && dogTP>=20)
         {
             isBiteInCD = true;
             sheep = FindNearestSheep();
@@ -90,7 +127,10 @@ public class DogAttribute : AttributeBase
     }
     IEnumerator RACD()
     {
-        sheep.GetComponent<SheepAttribute>().isBitedByDog = false;
+        if (sheep != null)
+        {
+            sheep.GetComponent<SheepAttribute>().isBitedByDog = false;
+        }
         float t = 0;
         while (t < biteCDTime)
         {
@@ -98,6 +138,14 @@ public class DogAttribute : AttributeBase
             yield return null;
         }
         isBiteInCD = false;
+    }
+    public bool EatMeat(Object_Consume obj)
+    {
+        if(obj == null|| obj.dogEat == null)
+            return false;
+        DogTP += obj.dogEat.trustPoint;
+        DogHP += obj.hungerRecoverPoint;
+        return true;
     }
 }
 public enum AnimatorState
