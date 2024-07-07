@@ -7,7 +7,7 @@ public class SoundCtr : MonoBehaviour
     public AudioSource backgroundMusic; // 背景音乐的AudioSource组件
     public AudioClip[] musicClips;      // 可选的背景音乐剪辑列表
     private int currentClipIndex = 0;   // 当前播放的音乐剪辑索引
- 
+
     void Start()
     {
         if (backgroundMusic == null)

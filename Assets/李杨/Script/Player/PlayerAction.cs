@@ -130,17 +130,20 @@ public class PlayerAction : MonoBehaviour
             bowAndArrow.SetActive(false);
         }
     }
-    public void PlayerDie()
+    public void PlayerDie() 
     {
         Instantiate(DidUI);
+        GameObject.Find("GameCtr").GetComponent<SumCtr>().endingIndex = 2;
     }
     public void PlayerHideEnding()
     {
         Instantiate(HideEndingUI);
+        GameObject.Find("GameCtr").GetComponent<SumCtr>().endingIndex = 1;
     }
     public void PlayerGoodEndint()
     {
         Instantiate(GoodEndingUI);
+        GameObject.Find("GameCtr").GetComponent<SumCtr>().endingIndex = 2;
     }
 
 }

@@ -9,6 +9,7 @@ public class StartScene : MonoBehaviour
     public void OnStartGameClick()
     {
         SceneManager.LoadScene("Test");
+
     }
     public void QuitGame()
     {

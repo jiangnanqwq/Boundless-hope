@@ -22,7 +22,6 @@ public class PlayerAttribute : MonoBehaviour
             {
                 //隐藏结局 获救
                 gameObject.GetComponent<PlayerAction>().PlayerHideEnding();
-                GameObject.Find("GameCtr").GetComponent<SumCtr>().endingIndex = 1;
                 return;
             }
             else if (value <= 20 && dog.trustMeCompletely && BagManagement.instance.objs.ContainsKey(7))//生命小于10 狗完全信任 背包存在肉干

@@ -697,6 +697,8 @@ MonoBehaviour:
   bowAndArrow: {fileID: 7748740581508836498}
   knife: {fileID: 2174581320995445904}
   DidUI: {fileID: 4806159216719537428, guid: 9723a312a7f7747408cb804f393b6f2e, type: 3}
+  HideEndingUI: {fileID: 4806159216719537428, guid: 3af88b330a0c34346b0264a9ab59fb2b, type: 3}
+  GoodEndingUI: {fileID: 4806159216719537428, guid: 88d9886e97332174e8deb2cbae7bf151, type: 3}
   playerAttribute: {fileID: 0}
 --- !u!114 &294206387226133090
 MonoBehaviour:
@@ -710,7 +712,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115b0aefd343e334d9780b17eb1e2451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowsAmount: 10
   playerHPMax: 100
   playerHP: 100
   playerSpeed: 2.5

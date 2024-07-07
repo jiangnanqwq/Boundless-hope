@@ -31,13 +31,13 @@ public class StarUIChange : MonoBehaviour
             case 1: imageComponent.sprite = newSprites[1];
                 buttonText.text = "继续游玩";
                 tittleText.text = "Hope";
-                quitButton.gameObject.SetActive(false);
+                quitButton.gameObject.SetActive(true);
                 jianjie.text = "舍己为“人”的你值得这个结局";
                 break;
             case 2: imageComponent.sprite = newSprites[0];
                 buttonText.text = "开始游戏";
                 tittleText.text = "Help";
-                quitButton.gameObject.SetActive(false);
+                quitButton.gameObject.SetActive(true);
                 jianjie.text = "有时候，自私的活下去确实是一种奢望，不妨先相信？可能会有不同的结局。";
                 break;
         }
