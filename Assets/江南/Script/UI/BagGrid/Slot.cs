@@ -36,23 +36,12 @@ public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Perform raycast to find the target slot
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
-
-        foreach (var result in results)
+        if (!CheckSpriteUnderPointer(eventData))
         {
-            if (result.gameObject.CompareTag("Slot"))
-            {
-                // Swap positions with the target slot
-                var targetSlot = result.gameObject.GetComponent<RectTransform>();
-                SwapItems(targetSlot);
-                return;
-            }
-        }
+            //check UI
 
-        // If no valid target, reset to original position
-        ResetPosition();
+            CheckUIUnderPointer(eventData);
+        }
     }
 
     private void SwapItems(RectTransform targetSlot)
@@ -85,8 +74,47 @@ public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         canvasGroup.blocksRaycasts = true;
     }
 
+    private bool CheckSpriteUnderPointer(PointerEventData eventData)
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(eventData.position);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
+        if (hit.collider != null && hit.collider.CompareTag("Bonfire"))
+        {
+            ResetPosition();//先撤回  以免更新UI的时候，slot槽未归位
+            Debug.Log("Dropped on: " + hit.collider.gameObject.name);
+            if(obj.obj.ID==4&& hit.collider.GetComponent<Bonfire>().canCook)
+            {
+                BagManagement.instance.ObjToBag(4, -1);
+                BagManagement.instance.ObjToBag(3, 1);
+            }
+            return true;
+        }
+        return false;
+    }
+    private void CheckUIUnderPointer(PointerEventData eventData)
+    {
+        // Perform raycast to find the target slot
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
 
+        foreach (var result in results)
+        {
+            if (result.gameObject.CompareTag("Slot"))
+            {
+                // Swap positions with the target slot
+                var targetSlot = result.gameObject.GetComponent<RectTransform>();
+                SwapItems(targetSlot);
+                return;
+            }
+            else if (result.gameObject.CompareTag("Bonfire"))
+            {
+                Debug.Log("Haha");
+            }
+        }
+        // If no valid target, reset to original position
+        ResetPosition();
+    }
     //------------------------------
     public ObjectOwn obj;
 

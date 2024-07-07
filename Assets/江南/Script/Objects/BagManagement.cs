@@ -12,19 +12,12 @@ public class BagManagement : MonoBehaviour
     {
         instance = this;
     }
-    private void Start()
-    {
-        UpdateUI();
-        objInfos = new();
-        objs = new();
-        //LoadResourcesRecursively("物品数据", objInfos);
-        objInfos.AddRange(Resources.LoadAll<ObjectBase>("物品数据"));
-        ObjToBag(5, 2);
-    }
-
-
 
     public Image[] imageBackground;
+    [Space] public Slider HPSlider;
+    public Text HPText;
+    [Space] public GameObject collectionUI;
+    public float collectionUIOffset;
 
     /// <summary>
     /// 0匕首 1弓 2箭 3熟肉 4生肉 5野果 6种子
@@ -35,7 +28,24 @@ public class BagManagement : MonoBehaviour
     /// </summary>
     public Dictionary<int, ObjectOwn> objs;
 
+    public PlayerAttribute playerAttribute;
 
+    public PlantingSeed plantingSeed;
+
+    public GameObject imageTips;
+
+    private void Start()
+    {
+        UpdateUI();
+        objInfos = new();
+        objs = new();
+        //LoadResourcesRecursively("物品数据", objInfos);
+        objInfos.AddRange(Resources.LoadAll<ObjectBase>("物品数据"));
+        ObjToBag(5, 2);
+        ObjToBag(6, 2);
+        ObjToBag(4, 5);
+        playerAttribute =GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttribute>();
+    }
 
     private void Update()
     {
@@ -139,7 +149,7 @@ public class BagManagement : MonoBehaviour
     //快捷栏按钮被按下
     public void OnGridClick()
     {
-        Slot s = EventSystem.current.currentSelectedGameObject.GetComponent<Slot>();    
+        Slot s = EventSystem.current.currentSelectedGameObject.GetComponent<Slot>();
         if (s != null) s.obj?.UseItem();
     }
 
@@ -190,26 +200,30 @@ public class ObjectOwn
             case ObjectCategory.Normal:
                 if (obj.ID == 6)//种子
                 {
-
+                    BagManagement.instance.plantingSeed.BuildPlant();
                 }
                 break;
             case ObjectCategory.Weapon:
-                if (obj.ID == 0)//匕首
-                {
-                    //攻击
-                }
-                else if (obj.ID == 1)//弓
-                {
-                    if (BagManagement.instance.objs.ContainsKey(2))//背包中是否有箭
-                    {
-                        //攻击
-                    }
-                }
+                //if (obj.ID == 0)//匕首
+                //{
+                //    //攻击
+                //}
+                //else if (obj.ID == 1)//弓
+                //{
+                //    if (BagManagement.instance.objs.ContainsKey(2))//背包中是否有箭
+                //    {
+                //        //攻击
+                //    }
+                //}
                 break;
             case ObjectCategory.Consume:
-                BagManagement.instance.ObjToBag(obj.ID, -1);
-                //TODO 添加饥饿值
+                //添加饥饿值
+                if(BagManagement.instance.objs.ContainsKey(obj.ID)&& BagManagement.instance.objs[obj.ID].obj is Object_Consume objC)
+                {
+                    BagManagement.instance.playerAttribute.PlayerHP += objC.hungerRecoverPoint;
+                }
 
+                BagManagement.instance.ObjToBag(obj.ID, -1);
                 break;
             default:
                 break;

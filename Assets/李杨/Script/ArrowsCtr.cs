@@ -27,11 +27,18 @@ public class ArrowsCtr : MonoBehaviour
     } 
     private void OnTriggerEnter2D(Collider2D collision)//箭矢碰到物体带Animal tag的物体消灭彼此
     {
-        Debug.Log("箭矢碰到了物体");
-        if (collision.gameObject.tag == "Animal")
+        if (collision.gameObject.CompareTag("Sheep"))
         {
+            Debug.Log("箭矢碰到了羊");
+            BagManagement.instance.ObjToBag(4, 2);
+
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
+        }
+        else if (collision.gameObject.CompareTag("Dog"))
+        {
+            Debug.Log("箭矢碰到了狗");
+            collision.GetComponent<DogAttribute>().DogHP -= 20;
         }
     }
 }

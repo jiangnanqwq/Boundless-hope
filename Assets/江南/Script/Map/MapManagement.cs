@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MapManagement : MonoBehaviour
 {
+    public static GameObject[] Sheeps;
     public Quad tree;
     private void Start()
     {
@@ -10,6 +11,8 @@ public class MapManagement : MonoBehaviour
         //tree.Insert(new Node(new Point(1, 2), 45));
         //print(tree.Search(new(1, 2)));
         //print(GameObject.FindGameObjectWithTag("Resource").name);
+
+        Sheeps = GameObject.FindGameObjectsWithTag("Sheep");
     }
 }
 public struct Point

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -14,10 +12,15 @@ public class PlayerAction : MonoBehaviour
     public GameObject knife;
     private float handDistance = 0.24f;
     private bool isShooting = false;
+    private Rigidbody2D rb;
+
+    public PlayerAttribute playerAttribute;
 
     private void Start()
     {
-        m_speed = this.GetComponent<PlayerAttribute>().playerSpeed; 
+        playerAttribute = GetComponent<PlayerAttribute>();
+        rb = GetComponent<Rigidbody2D>();
+        m_speed = playerAttribute.playerSpeed;
     }
 
     void Update()
@@ -34,6 +37,10 @@ public class PlayerAction : MonoBehaviour
         {
             SwitchWeapon();
         }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            playerAttribute.dog.Attack();
+        }
     }
     //移动
     float horizontal; //A D 左右
@@ -42,16 +49,15 @@ public class PlayerAction : MonoBehaviour
     {
         horizontal = Input.GetAxis("Horizontal")  ;
         vertical = Input.GetAxis("Vertical");
-        this.transform.Translate(Vector3.up * vertical * m_speed * Time.deltaTime); 
-        this.transform.Translate(Vector3.right * horizontal * m_speed * Time.deltaTime);
+        rb.velocity =m_speed * (Vector3.up * vertical + Vector3.right * horizontal); 
         Animator animator = GetComponent<Animator>(); 
         animator.SetFloat("xValue", horizontal); 
         animator.SetFloat("yValue", vertical);
+
     }
     //射击
     IEnumerator PlayerShoot()
     {
-        gameObject.GetComponent<PlayerSoundCtr>().PlayerShootAudio();
         isShooting=true;
         Animator animator = hand.GetComponentInChildren<Animator>();
         animator.SetTrigger("isShoot");
@@ -71,18 +77,18 @@ public class PlayerAction : MonoBehaviour
         hand.transform.rotation = Quaternion.Euler(0, 0,targetAngle); 
 
         //如果处于向上走的状态且手的位置在头顶,则交换渲染优先级
-        if(vertical >0.05f&& (targetAngle >50&& targetAngle<130))
-        {
-            bowAndArrow.GetComponent<SpriteRenderer>().sortingOrder = 1;
-            knife.GetComponent<SpriteRenderer>().sortingOrder = 1;
-            this.GetComponent<SpriteRenderer>().sortingOrder = 2;
-        }
-        else
-        {
-            bowAndArrow.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            knife.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            this.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        }
+        //if(vertical >0.05f&& (targetAngle >50&& targetAngle<130))
+        //{
+        //    bowAndArrow.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        //    knife.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        //    this.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        //}
+        //else
+        //{
+        //    bowAndArrow.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        //    knife.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        //    this.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        //}
     }  
     //切换武器
     public void SwitchWeapon()
@@ -102,14 +108,6 @@ public class PlayerAction : MonoBehaviour
             knife.SetActive(true);
             bowAndArrow.SetActive(false);
         }
-    }
-    //角色死亡
-    public void PlayerDie()
-    {
-        Animator animator = GetComponent<Animator>();
-        animator.SetTrigger("isDie" );
-        gameObject.GetComponent<PlayerAttribute>().playerSpeed = 0;
-        hand.SetActive(false);
     }
 
 }

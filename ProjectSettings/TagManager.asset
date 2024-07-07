@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Resource
   - Slot
+  - Bonfire
+  - Sheep
+  - Dog
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - UI
   - Player
   - Resource
-  - 
+  - Entity
   - 
   - 
   - 
@@ -42,4 +45,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: NoSortByY
+    uniqueID: 1560335529
     locked: 0
