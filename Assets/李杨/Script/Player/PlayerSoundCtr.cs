@@ -10,13 +10,13 @@ public class PlayerSoundCtr : MonoBehaviour
     public AudioClip[] musicClips;      // 可选的背景音乐剪辑列表
     private int currentClipIndexcuan = 0;   // 当前播放的音乐剪辑索引 
     private bool isWalking = false;
-    void Start()
-    {
-        if (groundMusic == null)
-        {
-            groundMusic = GetComponent<AudioSource>();
-        }
-    }
+    //void Start()
+    //{
+    //    if (groundMusic == null)
+    //    {
+    //        groundMusic = GetComponent<AudioSource>();
+    //    }
+    //}
     public void OpenWalkAudio()
     {
         if (isWalking == false)

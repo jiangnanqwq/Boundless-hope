@@ -12,6 +12,8 @@ public class DayNightCycle2D : MonoBehaviour
 
     public static int Day=0;
 
+    public DayCounter dayCounter;
+
     private void Update()
     {
         currentTime += Time.deltaTime;
@@ -20,6 +22,7 @@ public class DayNightCycle2D : MonoBehaviour
         {
             currentTime = 0f;
             Day += 1;
+            dayCounter.UpdateText();
         }
 
         float timePercent = currentTime / dayDuration;
@@ -30,5 +33,7 @@ public class DayNightCycle2D : MonoBehaviour
     {
         globalLight.color = lightColor.Evaluate(timePercent);
         globalLight.intensity = lightIntensity.Evaluate(timePercent);
+
+        dayCounter.UpdateImage(globalLight.color);
     }
 }

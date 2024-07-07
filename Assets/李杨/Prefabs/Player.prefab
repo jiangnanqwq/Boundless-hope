@@ -800,8 +800,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 927579c482f218f42a21620d73177b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundMusic: {fileID: 0}
-  walkSound: {fileID: 0}
+  groundMusic: {fileID: 2519690105890186721}
+  walkSound: {fileID: 2859557127232102469}
   musicClips:
   - {fileID: 8300000, guid: 39dc57de4a75af143b7df6cf7ff9ae15, type: 3}
   - {fileID: 8300000, guid: 5180810cefa66234f93250d105301a88, type: 3}
