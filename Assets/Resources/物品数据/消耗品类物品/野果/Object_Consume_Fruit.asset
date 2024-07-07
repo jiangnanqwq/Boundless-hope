@@ -17,4 +17,4 @@ MonoBehaviour:
   description: 
   sprite: {fileID: 21300000, guid: 201fdeb8ab2825846b66b3ac05a2a547, type: 3}
   category: 2
-  hungerRecoverPoint: 0
+  hungerRecoverPoint: 20

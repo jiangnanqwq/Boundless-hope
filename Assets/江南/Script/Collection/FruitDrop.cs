@@ -1,5 +1,7 @@
+
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FruitDrop : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class FruitDrop : MonoBehaviour
             if (value <= 0)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
+                BagManagement.instance.collectionUI.SetActive(false);
             }
             else if (value < fruitCount)
             {
@@ -24,9 +27,16 @@ public class FruitDrop : MonoBehaviour
         }
     }
     private bool isGrow = false;
+
+    private bool isPlayerInRange = false;
+
+    private void Start()
+    {
+        fruitCount = fruitTotal;
+    }
     public void Init(float growTime, int fruitTotal, int fruitCount, bool isGrow)
     {
-        if (fruitTotal<=0)
+        if (fruitTotal <= 0)
         {
             Destroy(gameObject);
             return;
@@ -34,13 +44,13 @@ public class FruitDrop : MonoBehaviour
         this.growTime = growTime;
         this.fruitCount = fruitCount;
         this.fruitTotal = fruitTotal;
-        if (fruitCount <= 0 )
+        if (fruitCount <= 0)
         {
             transform.GetChild(0).gameObject.SetActive(false);
             StartCoroutine(Grow());
             this.isGrow = true;
         }
-        else if(isGrow)
+        else if (isGrow)
         {
             transform.GetChild(0).gameObject.SetActive(true);
             StartCoroutine(Grow());
@@ -81,5 +91,53 @@ public class FruitDrop : MonoBehaviour
         }
         FruitCount -= count;
         return count;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            BagManagement.instance.collectionUI.SetActive(true);
+
+            Vector3 targetWorldPosition = collision.transform.position;
+            targetWorldPosition.y += BagManagement.instance.collectionUIOffset;
+
+            // 将世界空间坐标转换为屏幕空间坐标
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(targetWorldPosition);
+
+            // 将屏幕空间坐标转换为UI元素的锚点位置
+            BagManagement.instance.collectionUI.GetComponent<RectTransform>().position = screenPosition;
+
+            Image image = BagManagement.instance.collectionUI.GetComponent<Image>();
+            image.sprite = BagManagement.instance.objInfos.Find(x => x.ID == 5).sprite;
+            image.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "野果";
+            image.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = "F";
+
+            Button bt = image.GetComponent<Button>();
+            bt.onClick.RemoveAllListeners();
+            bt.onClick.AddListener(() => { BagManagement.instance.ObjToBag(5, GetFruit(1)); });
+        }
+    }
+    private void Update()
+    {
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+        {
+            BagManagement.instance.ObjToBag(5, GetFruit(1));
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            isPlayerInRange = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            isPlayerInRange = false;
+            BagManagement.instance.collectionUI.SetActive(false);
+        }
     }
 }

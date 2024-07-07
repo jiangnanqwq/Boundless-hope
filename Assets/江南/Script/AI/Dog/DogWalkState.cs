@@ -1,40 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class DogWalkState : StateMachineBehaviour
 {
     Transform player;
+    DogAttribute da;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = player != null ? player : GameObject.FindGameObjectWithTag("Player").transform;
 
-        }
+        da = da != null ? da : animator.transform.GetComponent<DogAttribute>();
+
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (da.state==AnimatorState.walk)
+        {
+            Vector2 nextPointDirection = da.GetMoveDirection();
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
-
-    // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
-
-    // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
+            animator.SetFloat("SpeedX", nextPointDirection.x);
+            animator.SetFloat("SpeedY", nextPointDirection.y);
+            if (Vector2.Distance(da.agent.destination, da.agent.nextPosition) < 0.1f)
+            {
+                //Debug.Log("dog to idle"); 
+                da.state = AnimatorState.idle;
+                animator.SetFloat("SpeedX", 0);
+                animator.SetFloat("SpeedY", 0);
+            } 
+        }
+    }
 }
