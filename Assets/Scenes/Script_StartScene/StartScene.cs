@@ -8,6 +8,6 @@ public class StartScene : MonoBehaviour
     //¿ªÊ¼ÓÎÏ·
     public void OnStartGameClick()
     {
-        SceneManager.LoadScene("LoadScene");
+        SceneManager.LoadScene("Test");
     }
 }

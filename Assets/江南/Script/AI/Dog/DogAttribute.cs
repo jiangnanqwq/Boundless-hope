@@ -13,8 +13,6 @@ public class DogAttribute : AttributeBase
             {
                 value = 0;
                 //DeadAction
-
-
             }
             else if (value > MaxHP) value = MaxHP;
             currentHP = value;
