@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/LoadScene.unity.meta
+guid: 98cac9c3b8728164cb9516926bbf83f0
+========
 guid: 435d4f5f2b5a4f9488ad8a29eb46c93d
 folderAsset: yes
+>>>>>>>> 6771e395dcb580c5c52491314e9bf3c58557bc7e:Assets/Resources/Animation/Sheep.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
