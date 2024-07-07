@@ -7,11 +7,7 @@ public class SoundCtr : MonoBehaviour
     public AudioSource backgroundMusic; // 背景音乐的AudioSource组件
     public AudioClip[] musicClips;      // 可选的背景音乐剪辑列表
     private int currentClipIndex = 0;   // 当前播放的音乐剪辑索引
-    private void Awake()
-    {
-        // 确保在场景切换时不会销毁此对象
-        DontDestroyOnLoad(gameObject);
-    }
+ 
     void Start()
     {
         if (backgroundMusic == null)

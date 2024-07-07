@@ -22,6 +22,11 @@ public class DayNightCycle2D : MonoBehaviour
         {
             currentTime = 0f;
             Day += 1;
+            if (Day > 20)
+            {
+                gameObject.GetComponent<PlayerAction>().PlayerGoodEndint();
+                GameObject.Find("GameCtr").GetComponent<SumCtr>().endingIndex = 2;
+            }
             dayCounter.UpdateText();
         }
 

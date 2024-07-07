@@ -14,6 +14,7 @@ public class PlayerAction : MonoBehaviour
     [Space]
     public GameObject DidUI;
     public GameObject HideEndingUI;
+    public GameObject GoodEndingUI;
     private float handDistance = 0.24f;
     private bool isShooting = false;
     private Rigidbody2D rb;
@@ -137,6 +138,9 @@ public class PlayerAction : MonoBehaviour
     {
         Instantiate(HideEndingUI);
     }
-    
+    public void PlayerGoodEndint()
+    {
+        Instantiate(GoodEndingUI);
+    }
 
 }
