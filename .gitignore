@@ -75,3 +75,5 @@ crashlytics-build.properties
 Packages/*
 !Packages/manifest.json
 !Packages/packages-lock.json
+Assets/Scenes/MainScene.unity.meta
+Assets/Scenes/MainScene.unity
