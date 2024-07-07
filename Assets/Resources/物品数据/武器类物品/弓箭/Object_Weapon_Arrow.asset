@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   objName: "\u7BAD"
-  description: 
+  description: "\u4E0D\u53EF\u518D\u5F97\uFF0C\u4E14\u7528\u4E14\u73CD\u60DC"
   sprite: {fileID: 21300000, guid: 1cae13fd92bbc1647bdec133c2a20bda, type: 3}
   category: 1
   attackPoint: 0

@@ -1,9 +1,10 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManagement : MonoBehaviour
 {
-    public static GameObject[] Sheeps;
+    public static List<GameObject> Sheeps;
     public Quad tree;
     private void Start()
     {
@@ -12,7 +13,7 @@ public class MapManagement : MonoBehaviour
         //print(tree.Search(new(1, 2)));
         //print(GameObject.FindGameObjectWithTag("Resource").name);
 
-        Sheeps = GameObject.FindGameObjectsWithTag("Sheep");
+        Sheeps = new(GameObject.FindGameObjectsWithTag("Sheep"));
     }
 }
 public struct Point

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Object_Consume : ObjectBase
 {
     public float hungerRecoverPoint;
-    public DogEatAttribute dogEat;
+    public DogEatAttribute[] dogEat;
     public Object_Consume()
     {
         category = ObjectCategory.Consume;

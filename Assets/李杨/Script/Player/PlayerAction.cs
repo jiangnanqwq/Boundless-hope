@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -10,19 +11,21 @@ public class PlayerAction : MonoBehaviour
     public GameObject arrow;//射出去的箭矢
     public GameObject bowAndArrow;//弓箭
     public GameObject knife;
+    [Space]
     public GameObject DidUI;
+    public GameObject HideEndingUI;
     private float handDistance = 0.24f;
     private bool isShooting = false;
     private Rigidbody2D rb;
 
-    public PlayerAttribute playerAttribute;
+    [HideInInspector] public PlayerAttribute playerAttribute;
 
     private void Start()
     {
         playerAttribute = GetComponent<PlayerAttribute>();
         rb = GetComponent<Rigidbody2D>();
         m_speed = playerAttribute.playerSpeed;
-         
+
     }
 
     void Update()
@@ -31,9 +34,9 @@ public class PlayerAction : MonoBehaviour
         PlayerMove();
         //手移动 旋转
         HandMove();
-        if (Input.GetMouseButtonDown(0)&& isShooting == false&& bowAndArrow.activeSelf == true)
+        if (Input.GetMouseButtonDown(0) && CheckNotInUIClick() && isShooting == false && bowAndArrow.activeSelf == true && BagManagement.instance.objs.ContainsKey(2))//2就是箭的ID
         {
-            StartCoroutine("PlayerShoot");
+            StartCoroutine(nameof(PlayerShoot));
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -44,20 +47,26 @@ public class PlayerAction : MonoBehaviour
             playerAttribute.dog.Attack();
         }
     }
+    bool CheckNotInUIClick()
+    {
+        return !BagManagement.IsUIMouseLeftClick && EventSystem.current.currentSelectedGameObject == null;
+    }
+
+
     //移动
     float horizontal; //A D 左右
-    float vertical ; //W S 上 下
+    float vertical; //W S 上 下
     public void PlayerMove()
     {
-        horizontal = Input.GetAxis("Horizontal")  ;
+        horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-        rb.velocity =m_speed * (Vector3.up * vertical + Vector3.right * horizontal); 
-        Animator animator = GetComponent<Animator>(); 
-        animator.SetFloat("xValue", horizontal); 
+        rb.velocity = m_speed * (Vector3.up * vertical + Vector3.right * horizontal);
+        Animator animator = GetComponent<Animator>();
+        animator.SetFloat("xValue", horizontal);
         animator.SetFloat("yValue", vertical);
-        if(horizontal==0&&vertical == 0) 
+        if (horizontal == 0 && vertical == 0)
         {
-            gameObject.GetComponent<PlayerSoundCtr>().CloseWalkAudio();           
+            gameObject.GetComponent<PlayerSoundCtr>().CloseWalkAudio();
         }
         else
         {
@@ -68,23 +77,24 @@ public class PlayerAction : MonoBehaviour
     IEnumerator PlayerShoot()
     {
         gameObject.GetComponent<PlayerSoundCtr>().PlayerShootAudio();
-        isShooting=true;
+        isShooting = true;
         Animator animator = hand.GetComponentInChildren<Animator>();
         animator.SetTrigger("isShoot");
         yield return new WaitForSeconds(0.5f);
-        GameObject aArow =  Instantiate(arrow, shootPoint);
+        GameObject aArow = Instantiate(arrow, shootPoint);
+        BagManagement.instance.ObjToBag(2, -1);
         aArow.transform.SetParent(this.gameObject.transform.parent);
         isShooting = false;
-    } 
+    }
     //手移动
     public void HandMove()
-    {  
+    {
         Vector2 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = new Vector2(worldMousePosition.x - handPoint.position.x, worldMousePosition.y - handPoint.position.y);
         direction = direction.normalized;
         hand.transform.position = new Vector2(handPoint.position.x + handDistance * direction.x, handPoint.position.y + handDistance * direction.y);
         float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        hand.transform.rotation = Quaternion.Euler(0, 0,targetAngle); 
+        hand.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
 
         //如果处于向上走的状态且手的位置在头顶,则交换渲染优先级
         //if(vertical >0.05f&& (targetAngle >50&& targetAngle<130))
@@ -99,11 +109,11 @@ public class PlayerAction : MonoBehaviour
         //    knife.GetComponent<SpriteRenderer>().sortingOrder = 2;
         //    this.GetComponent<SpriteRenderer>().sortingOrder = 1;
         //}
-    }  
+    }
     //切换武器
     public void SwitchWeapon()
     {
-        if(knife.activeSelf == true&& bowAndArrow.activeSelf == false)
+        if (knife.activeSelf == true && bowAndArrow.activeSelf == false)
         {
             knife.SetActive(false);
             bowAndArrow.SetActive(true);
@@ -120,8 +130,13 @@ public class PlayerAction : MonoBehaviour
         }
     }
     public void PlayerDie()
-    { 
-        Instantiate(DidUI); 
+    {
+        Instantiate(DidUI);
     }
+    public void PlayerHideEnding()
+    {
+        Instantiate(HideEndingUI);
+    }
+    
 
 }

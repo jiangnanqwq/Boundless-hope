@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 //其实就是个状态栏
 public class BagManagement : MonoBehaviour
 {
+    public static bool IsUIMouseLeftClick=false;
     public static BagManagement instance;
     private void Awake()
     {
@@ -18,6 +20,7 @@ public class BagManagement : MonoBehaviour
     public Text HPText;
     [Space] public GameObject collectionUI;
     public float collectionUIOffset;
+    [Space] public GameObject slotDescriptionUI;
 
     /// <summary>
     /// 0匕首 1弓 2箭 3熟肉 4生肉 5野果 6种子
@@ -50,7 +53,10 @@ public class BagManagement : MonoBehaviour
         ObjToBag(5, 2);
         ObjToBag(6, 2);
         ObjToBag(4, 5);
-        playerAttribute =GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttribute>();
+        ObjToBag(2, 10);
+        ObjToBag(7, 1);
+
+        playerAttribute = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttribute>();
     }
 
     private void Update()
@@ -89,9 +95,9 @@ public class BagManagement : MonoBehaviour
 
 
     /// <summary>
-    /// 添加移除都用这个
+    /// 添加移除都用这个 0匕首 1弓 2箭 3熟肉 4生肉 5野果 6种子 7肉干
     /// </summary>
-    /// <param name="ID">物品ID（唯一）0匕首 1弓 2箭 3熟肉 4生肉 5野果 6种子</param>
+    /// <param name="ID">物品ID（唯一）0匕首 1弓 2箭 3熟肉 4生肉 5野果 6种子 7肉干</param>
     /// <param name="count">正值添加  负值移除</param>
     public void ObjToBag(int ID, int count)
     {
@@ -102,8 +108,8 @@ public class BagManagement : MonoBehaviour
             if (objs[ID].count <= 0)
             {
                 objs.Remove(ID);
-                if (ID == 2)//箭
-                    goto outSide;
+                //if (ID == 2)//箭
+                //goto outSide;
                 //需要在快捷栏移除
                 for (int i = 0; i < imageBackground.Length; ++i)
                 {
@@ -119,8 +125,8 @@ public class BagManagement : MonoBehaviour
         else if (count > 0)
         {
             objs[ID] = new ObjectOwn(objInfos.Find(x => x.ID == ID), count);
-            if (ID == 2)//箭
-                goto outSide;
+            //if (ID == 2)//箭
+            // goto outSide;
             //需要在快捷栏添加
             for (int i = 0; i < imageBackground.Length; ++i)
             {
@@ -132,7 +138,7 @@ public class BagManagement : MonoBehaviour
                 }
             }
         }
-    outSide:
+        //outSide:
         UpdateUI();
     }
     public void UpdateUI()
@@ -188,6 +194,19 @@ public class BagManagement : MonoBehaviour
             LoadResourcesRecursively(path + "/" + directoryName, resources);
         }
     }
+    Coroutine routine;
+    public void ShowTips(string word)
+    {
+        if (routine != null) StopCoroutine(routine);
+        routine = StartCoroutine(DelayActiveF(word));
+    }
+    private IEnumerator DelayActiveF(string word)
+    {
+        imageTips.SetActive(true);
+        imageTips.transform.GetChild(0).GetComponent<Text>().text = word;
+        yield return new WaitForSeconds(3);
+        imageTips.SetActive(false);
+    }
 }
 
 public class ObjectOwn
@@ -207,6 +226,7 @@ public class ObjectOwn
                 if (obj.ID == 6)//种子
                 {
                     BagManagement.instance.plantingSeed.BuildPlant();
+                    BagManagement.instance.ObjToBag(6, -1);
                 }
                 break;
             case ObjectCategory.Weapon:
@@ -224,7 +244,7 @@ public class ObjectOwn
                 break;
             case ObjectCategory.Consume:
                 //添加饥饿值
-                if(BagManagement.instance.objs.ContainsKey(obj.ID)&& BagManagement.instance.objs[obj.ID].obj is Object_Consume objC)
+                if (BagManagement.instance.objs.ContainsKey(obj.ID) && BagManagement.instance.objs[obj.ID].obj is Object_Consume objC)
                 {
                     BagManagement.instance.playerAttribute.PlayerHP += objC.hungerRecoverPoint;
                 }

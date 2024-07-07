@@ -28,6 +28,7 @@ public class DogWalkState : StateMachineBehaviour
                 da.state = AnimatorState.idle;
                 animator.SetFloat("SpeedX", 0);
                 animator.SetFloat("SpeedY", 0);
+                animator.SetBool("IsWalk", false);
             } 
         }
     }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Vector2 originalPosition;
     private Transform originalParent;
@@ -89,10 +90,14 @@ public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 BagManagement.instance.ObjToBag(3, 1);
                 return true;
             }
-            else if (hit.collider.CompareTag("Dog") )
+            else if (hit.collider.CompareTag("Dog"))
             {
                 ResetPosition();
-                DogAttribute dog =hit.collider.GetComponent<DogAttribute>();
+                DogAttribute dog = hit.collider.GetComponent<DogAttribute>();
+                if (dog.isDead)
+                {
+                    return true;
+                }
                 if (dog.EatMeat(obj.obj as Object_Consume))
                 {
                     BagManagement.instance.ObjToBag(obj.obj.ID, -1);
@@ -125,8 +130,24 @@ public class Slot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         // If no valid target, reset to original position
         ResetPosition();
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        BagManagement.instance.slotDescriptionUI.SetActive(true);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position, eventData.pressEventCamera, out var localPoint);
+        BagManagement.instance.slotDescriptionUI.GetComponent<RectTransform>().anchoredPosition = localPoint + Vector2.right * 100 + Vector2.up * 300;
+        BagManagement.instance.slotDescriptionUI.transform.GetChild(0).GetComponent<Text>().text = obj.obj.objName;
+        BagManagement.instance.slotDescriptionUI.transform.GetChild(1).GetComponent<Text>().text = obj.obj.description;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        BagManagement.instance.slotDescriptionUI.SetActive(false);
+    }
+
     //------------------------------
     public ObjectOwn obj;
 
 
 }
+

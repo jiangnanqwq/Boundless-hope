@@ -60,8 +60,7 @@ public class DogIdleState : StateMachineBehaviour
 
                     da.SetTheDestination(point);
 
-                    animator.SetFloat("SpeedX", 1);
-                    animator.SetFloat("SpeedY", 1);
+                    animator.SetBool("IsWalk", true);
                     da.state = AnimatorState.walk;
                 }
 

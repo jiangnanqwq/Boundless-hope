@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.XR;
 
 public class KnifeCtr : MonoBehaviour
@@ -14,7 +15,7 @@ public class KnifeCtr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null)
         {
             KnifeAttack();
         }
@@ -37,9 +38,9 @@ public class KnifeCtr : MonoBehaviour
     //动画事件
     //1:over
     //0
-    void SwitchColliders(int i)
+    public void SwitchColliders(int i)
     {
-        Collider2D collision = Physics2D.OverlapCircle(transform.position, 2, LayerMask.GetMask("Entity"));
+        Collider2D collision = Physics2D.OverlapCircle(transform.position, 1.2f, LayerMask.GetMask("Entity"));
         
         if (collision && !colliders.Contains(collision))
         {
@@ -49,7 +50,9 @@ public class KnifeCtr : MonoBehaviour
                 Debug.Log("刀碰到了羊");
                 BagManagement.instance.ObjToBag(4, 2);
 
+                MapManagement.Sheeps.Remove(collision.gameObject);
                 Destroy(collision.gameObject);
+                
             }
             else if (collision.gameObject.CompareTag("Dog"))
             {

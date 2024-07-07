@@ -1,25 +1,34 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DogAttribute : AttributeBase
 {
+    public bool isDead = false;
     public float DogHP
     {
         get => currentHP;
         set
         {
-            if (value < 0)
+            if (value <= 0)
             {
                 value = 0;
-                //DeadAction
-
-
+                if (!isDead)
+                {
+                    isDead = true;
+                    agent.isStopped = true;
+                    GetComponent<Collider2D>().enabled = false;
+                    //DeadAction
+                    GetComponent<Animator>().SetTrigger("Dead");
+                    BagManagement.instance.ObjToBag(4, 1);
+                    Destroy(gameObject, 20);
+                }
             }
-            else if (value > MaxHP) value = MaxHP;
+            else if (value >= MaxHP) value = MaxHP;
             currentHP = value;
             //UI
-            BagManagement.instance.sliderLeftDog.fillAmount = currentHP/ MaxHP;
+            BagManagement.instance.sliderLeftDog.fillAmount = currentHP / MaxHP;
             BagManagement.instance.textLeftDog.text = (int)currentHP + "/" + (int)MaxHP;
 
         }
@@ -32,14 +41,22 @@ public class DogAttribute : AttributeBase
         get => dogTP;
         set
         {
-            if (value < 0)
+            if (value <= 0)
             {
                 value = 0;
-                //Trust Action
+                //No Trust Action
 
+                BagManagement.instance.ShowTips("没爱了,毁灭吧[doge]");
+            }
+            else if (value >= dogTPMax)
+            {
+                value = dogTPMax;
+                //Trust Action
+                trustMeCompletely = true;
+
+                BagManagement.instance.ShowTips("已经完全信任你,按C键辅助狩猎");
 
             }
-            else if (value > dogTPMax) value = dogTPMax;
             dogTP = value;
             //UI
             BagManagement.instance.sliderRightDog.fillAmount = dogTP / dogTPMax;
@@ -52,11 +69,12 @@ public class DogAttribute : AttributeBase
     [HideInInspector] public bool isBiteInCD = false;
     public float biteCDTime = 5;//攻击CD时间
 
-    private float decreaseHPSpeed = 0.5f;
+    private readonly float decreaseHPSpeed = 0.5f;
+    public bool trustMeCompletely = false;
     private void Start()
     {
         //speed = 5;
-        biteTime = 5; 
+        biteTime = 5;
         DogTP = 20;
         DogHP = MaxHP;
     }
@@ -74,7 +92,9 @@ public class DogAttribute : AttributeBase
     GameObject sheep;
     public void Attack()
     {
-        if (MapManagement.Sheeps.Length > 0 && !isBiteInCD && dogTP>=20)
+
+        if (trustMeCompletely && MapManagement.Sheeps.Count > 0 && !isBiteInCD)
+        //if (MapManagement.Sheeps.Count > 0 && !isBiteInCD)
         {
             isBiteInCD = true;
             sheep = FindNearestSheep();
@@ -87,14 +107,17 @@ public class DogAttribute : AttributeBase
     }
     public GameObject FindNearestSheep()
     {
-        GameObject[] sheeps = MapManagement.Sheeps;
+        List<GameObject> sheeps = MapManagement.Sheeps;
         GameObject sheep = null;
         float d = float.MaxValue;
-        for (int i = 0; i < sheeps.Length; ++i)
+        Transform player = BagManagement.instance.playerAttribute.transform;
+        for (int i = 0; i < sheeps.Count; ++i)
         {
-            if (Vector2.Distance(transform.position, sheeps[i].transform.position) < d)
+            float d2 = Vector2.Distance(player.position, sheeps[i].transform.position);
+            if (d2 < d)
             {
                 sheep = sheeps[i];
+                d = d2;
             }
         }
         return sheep;
@@ -141,10 +164,12 @@ public class DogAttribute : AttributeBase
     }
     public bool EatMeat(Object_Consume obj)
     {
-        if(obj == null|| obj.dogEat == null)
+        if (obj == null || obj.dogEat.Length <= 0)
             return false;
-        DogTP += obj.dogEat.trustPoint;
+        DogTP += obj.dogEat[0].trustPoint;
         DogHP += obj.hungerRecoverPoint;
+        if (obj.ID == 7 && PlayerAttribute.IsBeginHidEnding1Detect)
+            PlayerAttribute.IsHidEnding1 = true;
         return true;
     }
 }

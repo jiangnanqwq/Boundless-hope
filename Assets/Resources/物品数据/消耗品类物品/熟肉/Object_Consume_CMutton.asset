@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   objName: "\u719F\u8089"
-  description: 
+  description: "\u589E\u52A040\u9971\u98DF\u5EA6\n\u62D6\u62FD\u81F3\u72D7\u5B50\uFF0C+40\u9971\u98DF\uFF0C+20\u4FE1\u4EFB"
   sprite: {fileID: 21300000, guid: ebb97832ee22cc441b67fc45e6ec870a, type: 3}
   category: 2
-  hungerRecoverPoint: 50
+  hungerRecoverPoint: 40
   dogEat:
-    trustPoint: 60
+  - trustPoint: 20

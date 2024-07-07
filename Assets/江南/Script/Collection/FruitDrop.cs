@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class FruitDrop : MonoBehaviour
 {
-    public static int OccupyGrid = 2;
-    public float growTime;
-    public int fruitTotal;//上限值
-    private int fruitCount;//当前可采摘的数量
+    private float growTime = 300;//生长时间 单位秒
+    private float timeCurrent = 0;
+
+    private int fruitTotal = 2;//上限值
+    private int fruitCount = 2;//当前可采摘的数量
     public int FruitCount
     {
         get => fruitCount;
@@ -29,10 +30,9 @@ public class FruitDrop : MonoBehaviour
     private bool isGrow = false;
 
     private bool isPlayerInRange = false;
-
     private void Start()
     {
-        fruitCount = fruitTotal;
+        growTime = 300; fruitTotal = 2; fruitCount = 2; isGrow = false; isPlayerInRange = false;
     }
     public void Init(float growTime, int fruitTotal, int fruitCount, bool isGrow)
     {
@@ -69,7 +69,7 @@ public class FruitDrop : MonoBehaviour
     private IEnumerator Grow()
     {
         isGrow = true;
-        float timeCurrent = 0;
+        timeCurrent = 0;
         while (timeCurrent < growTime)
         {
             yield return null;
@@ -97,8 +97,16 @@ public class FruitDrop : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (fruitCount <= 0) return;
             BagManagement.instance.collectionUI.SetActive(true);
+
+            if (fruitCount <= 0)
+            {
+                Image i = BagManagement.instance.collectionUI.GetComponent<Image>();
+                i.sprite = Resources.Load<Sprite>("Image/Bush_Red");
+                i.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "生长中:"+ (int)timeCurrent+"/"+ (int)growTime;
+                i.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = ".";
+                return;
+            }
 
             Vector3 targetWorldPosition = collision.transform.position;
             targetWorldPosition.y += BagManagement.instance.collectionUIOffset;
@@ -121,9 +129,10 @@ public class FruitDrop : MonoBehaviour
     }
     private void Update()
     {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && fruitCount > 0)
         {
             BagManagement.instance.ObjToBag(5, GetFruit(1));
+            BagManagement.instance.ObjToBag(6, 1);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)

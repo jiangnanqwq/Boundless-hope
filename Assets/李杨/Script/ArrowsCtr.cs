@@ -32,6 +32,7 @@ public class ArrowsCtr : MonoBehaviour
             Debug.Log("¼ýÊ¸Åöµ½ÁËÑò");
             BagManagement.instance.ObjToBag(4, 2);
 
+            MapManagement.Sheeps.Remove(collision.gameObject);
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }
